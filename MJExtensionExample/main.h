@@ -11,6 +11,8 @@
 
 
 /** 函数的声明（只用于此示例程序，仅仅是为了演示框架的使用） */
+void testObjectContainsDateProperty();
+
 void keyValues2object();
 void keyValues2object1();
 void keyValues2object2();

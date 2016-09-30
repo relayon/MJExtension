@@ -15,6 +15,7 @@
 #import "MJFoundation.h"
 #import "NSString+MJExtension.h"
 #import "NSObject+MJClass.h"
+#import "MJUtils.h"
 
 @implementation NSObject (MJKeyValue)
 
@@ -125,6 +126,12 @@ static NSNumberFormatter *numberFormatter_;
                 value = [NSMutableString stringWithString:value];
             } else if (propertyClass == [NSMutableData class] && [value isKindOfClass:[NSData class]]) {
                 value = [NSMutableData dataWithData:value];
+            } else if (propertyClass == [NSDate class]) {
+                if ([value isKindOfClass:[NSString class]]) {
+                    value = [MJUtils dateWithString:value];
+                } else {
+                    value = nil;
+                }
             }
             
             if (!type.isFromFoundation && propertyClass) { // 模型属性
@@ -329,6 +336,12 @@ static NSNumberFormatter *numberFormatter_;
                 value = [NSObject mj_keyValuesArrayWithObjectArray:value];
             } else if (propertyClass == [NSURL class]) {
                 value = [value absoluteString];
+            } else if (propertyClass == [NSDate class]) {
+                if ([value isKindOfClass:[NSDate class]]) {
+                    value = [MJUtils stringWithDate:value];
+                } else {
+                    value = @"";
+                }
             }
             
             // 4.赋值

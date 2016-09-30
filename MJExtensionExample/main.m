@@ -18,6 +18,7 @@
 #import "MJDog.h"
 #import "MJBook.h"
 #import "MJBox.h"
+#import "MJDate.h"
 #import <CoreData/CoreData.h>
 
 
@@ -37,6 +38,8 @@ int main(int argc, char * argv[]) {
         // 关于模型的具体配置可以参考：MJExtensionConfig.m
         // 或者参考每个模型的.m文件中被注释掉的配置
         
+        execute(testObjectContainsDateProperty, @"测试包含 NSDate 的模型");
+        
         execute(keyValues2object, @"简单的字典 -> 模型");
         execute(keyValues2object1, @"JSON字符串 -> 模型");
         execute(keyValues2object2, @"复杂的字典 -> 模型 (模型里面包含了模型)");
@@ -53,6 +56,31 @@ int main(int argc, char * argv[]) {
         
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
+}
+
+
+/**
+ 包含日期的对象 -> 字典
+ */
+void testObjectContainsDateProperty() {
+    // 模型
+    MJDate* mjDate = [MJDate new];
+    mjDate.name = @"mj_date";
+    mjDate.date = [NSDate date];
+    
+    // 模型转字典
+    NSDictionary *mjDic = mjDate.mj_keyValues;
+    MJExtensionLog(@"%@", mjDic);
+    // 字典转模型
+    MJDate* d2m = [MJDate mj_objectWithKeyValues:mjDic];
+    MJExtensionLog(@"name=%@, date=%@", d2m.name, d2m.date);
+    
+    // 模型转字符串
+    NSString* jstr = mjDate.mj_JSONString;
+    MJExtensionLog(@"%@", jstr);
+    // 字符串转模型
+    MJDate* s2m = [MJDate mj_objectWithKeyValues:jstr];
+    MJExtensionLog(@"name=%@, date=%@", s2m.name, s2m.date);
 }
 
 /**
